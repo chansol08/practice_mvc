@@ -3,16 +3,11 @@
   User: chans
   Date: 2023-10-23
 --%>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.MemberVO" %>
-<%
-    List<MemberVO> members = (List<MemberVO>) request.getAttribute("members");
-%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
-
     <title>member list</title>
 
     <!--  start bootstrap3 info  -->
@@ -42,35 +37,35 @@
         <td>전화번호</td>
         <td></td>
     </tr>
-    <% for (MemberVO member : members) { %>
-    <tr>
-        <td>
-            <%=member.getNumber()%>
-        </td>
-        <td>
-            <a href="/memberContent.do?number=<%=member.getNumber()%>"/><%=member.getId()%>
-        </td>
-        <td>
-            <%=member.getPassword()%>
-        </td>
-        <td>
-            <%=member.getName()%>
-        </td>
-        <td>
-            <%=member.getAge()%>
-        </td>
-        <td>
-            <%=member.getEmail()%>
-        </td>
-        <td>
-            <%=member.getPhone()%>
-        </td>
-        <td>
-            <input type="button" value="삭제" class="btn btn-warning"
-                   onclick="deleteFn(<%=member.getNumber()%>)">
-        </td>
-    </tr>
-    <% } %>
+    <c:forEach var="member" items="${members}">
+        <tr>
+            <td>
+                ${member.number}
+            </td>
+            <td>
+                <a href="/memberContent.do?number=${member.number}" />${member.id}
+            </td>
+            <td>
+                ${member.password}
+            </td>
+            <td>
+                ${member.name}
+            </td>
+            <td>
+                ${member.age}
+            </td>
+            <td>
+                ${member.email}
+            </td>
+            <td>
+                ${member.phone}
+            </td>
+            <td>
+                <input type="button" value="삭제" class="btn btn-warning"
+                       onclick="deleteFn(${member.number})">
+            </td>
+        </tr>
+    </c:forEach>
     <tr>
         <td colspan="8" align="right">
             <input type="button" value="회원가입" class="btn btn-primary"

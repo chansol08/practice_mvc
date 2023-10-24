@@ -3,15 +3,11 @@
   User: chans
   Date: 2023-10-23
 --%>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="model.MemberVO" %>
-<%
-    MemberVO member = (MemberVO) request.getAttribute("member");
-%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
-
     <title>member content</title>
 
     <!--  start bootstrap3 info  -->
@@ -25,45 +21,41 @@
 </head>
 <body>
 <form action="/memberUpdate.do" method="post">
-    <input type="hidden" name="number" value="<%=member.getNumber()%>">
+    <input type="hidden" name="number" value="${member.number}" />
     <table class="table table-bordered">
-        <% if (member != null) { %>
-        <tr>
-            <td colspan="2"><%=member.getName()%> 회원의 상세 보기</td>
-        </tr>
-        <tr>
-            <td>번호</td>
-            <td><%=member.getNumber()%></td>
-        </tr>
-        <tr>
-            <td>아이디</td>
-            <td><%=member.getId()%></td>
-        </tr>
-        <tr>
-            <td>비밀번호</td>
-            <td><%=member.getPassword()%></td>
-        </tr>
-        <tr>
-            <td>이름</td>
-            <td><%=member.getName()%></td>
-        </tr>
-        <tr>
-            <td>나이</td>
-            <td><input type="text" name="age" value="<%=member.getAge()%>"></td>
-        </tr>
-        <tr>
-            <td>이메일</td>
-            <td><input type="text" name="email" value="<%=member.getEmail()%>"></td>
-        </tr>
-        <tr>
-            <td>전화번호</td>
-            <td><input type="text" name="phone" value="<%=member.getPhone()%>"></td>
-        </tr>
-        <% } else { %>
-        <tr>
-            <td>일치하는 회원이 없습니다.</td>
-        </tr>
-        <% } %>
+        <c:if test="${member != null}">
+            <tr>
+                <td colspan="2">${member.name} 회원의 상세 보기</td>
+            </tr>
+            <tr>
+                <td>번호</td>
+                <td>${member.number}</td>
+            </tr>
+            <tr>
+                <td>아이디</td>
+                <td>${member.id}</td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td>${member.password}</td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td>${member.name}</td>
+            </tr>
+            <tr>
+                <td>나이</td>
+                <td><input type="text" name="age" value="${member.age}"></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td><input type="text" name="email" value="${member.email}"></td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td><input type="text" name="phone" value="${member.phone}"></td>
+            </tr>
+        </c:if>
         <tr>
             <td colspan="2" align="center">
                 <input type="submit" value="수정하기" class="btn btn-primary">
