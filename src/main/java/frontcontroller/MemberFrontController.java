@@ -1,7 +1,6 @@
 package frontcontroller;
 
-import model.MemberDAO;
-import model.MemberVO;
+import controller.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("*.do")
 public class MemberFrontController extends HttpServlet {
@@ -18,7 +16,7 @@ public class MemberFrontController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("euc-kr");
+        request.setCharacterEncoding("UTF-8");
 
         String url = request.getRequestURI();
         System.out.println("url = " + url);
@@ -28,64 +26,41 @@ public class MemberFrontController extends HttpServlet {
         String command = url.substring(contextPath.length());
         System.out.println("command = " + command);
 
-        MemberDAO dao = new MemberDAO();
+        Controller controller = null;
 
         if (command.equals("/memberList.do")) {
-            List<MemberVO> members = dao.memberList();
+            controller = new MemberListController();
+            String nextPage = controller.requestHandler(request, response);
 
-            request.setAttribute("members", members);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("member/memberList.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(nextPage);
             dispatcher.forward(request, response);
         } else if (command.equals("/memberInsert.do")) {
-            MemberVO member = new MemberVO();
-            member.setId(request.getParameter("id"));
-            member.setPassword(request.getParameter("password"));
-            member.setName(request.getParameter("name"));
-            member.setAge(Integer.parseInt(request.getParameter("age")));
-            member.setEmail(request.getParameter("email"));
-            member.setPhone(request.getParameter("phone"));
+            controller = new MemberInsertController();
+            String nextPage = controller.requestHandler(request, response);
 
-            int count = dao.memberInsert(member);
-
-            if (count > 0) {
-                response.sendRedirect("/memberList.do");
-            } else {
-                throw new ServletException("insert fail");
-            }
+            response.sendRedirect(nextPage);
         } else if (command.equals("/memberRegister.do")) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("member/memberRegister.html");
+            controller = new MemberRegisterController();
+            String nextPage = controller.requestHandler(request, response);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher(nextPage);
             dispatcher.forward(request, response);
         } else if (command.equals("/memberContent.do")) {
-            int number = Integer.parseInt(request.getParameter("number"));
-            MemberVO member = dao.memberContent(number);
+            controller = new MemberContentController();
+            String nextPage = controller.requestHandler(request, response);
 
-            request.setAttribute("member", member);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("member/memberContent.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher(nextPage);
             dispatcher.forward(request, response);
         } else if (command.equals("/memberUpdate.do")) {
-            int number = Integer.parseInt(request.getParameter("number"));
-            MemberVO member = dao.memberContent(number);
-            member.setAge(Integer.parseInt(request.getParameter("age")));
-            member.setEmail(request.getParameter("email"));
-            member.setPhone(request.getParameter("phone"));
+            controller = new MemberUpdateController();
+            String nextPage = controller.requestHandler(request, response);
 
-            int count = dao.memberUpdate(member);
-
-            if (count > 0) {
-                response.sendRedirect("/memberList.do");
-            } else {
-                throw new ServletException("update fail");
-            }
+            response.sendRedirect(nextPage);
         } else if (command.equals("/memberDelete.do")) {
-            int number = Integer.parseInt(request.getParameter("number"));
+            controller = new MemberDeleteController();
+            String nextPage = controller.requestHandler(request, response);
 
-            int count = dao.memberDelete(number);
-
-            if (count > 0) {
-                response.sendRedirect("/memberList.do");
-            } else {
-                throw new ServletException("delete fail");
-            }
+            response.sendRedirect(nextPage);
         }
     }
 }
