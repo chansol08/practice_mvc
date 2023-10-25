@@ -17,6 +17,6 @@ public class RedirectController extends HttpServlet {
         int age = 30;
         String email = "abc@def.com";
 
-        response.sendRedirect("view/redirect.jsp?data=" + name + "&age=" + age + "&email=" + email);
+        response.sendRedirect("practice-view/redirect.jsp?data=" + name + "&age=" + age + "&email=" + email);
     }
 }

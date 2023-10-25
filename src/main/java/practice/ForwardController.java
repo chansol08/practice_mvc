@@ -26,7 +26,7 @@ public class ForwardController extends HttpServlet {
         member.setEmail(email);
 
         request.setAttribute("member", member);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/forward.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("practice-view/forward.jsp");
         dispatcher.forward(request, response);
     }
 }

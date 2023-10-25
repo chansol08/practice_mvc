@@ -62,14 +62,14 @@
             </td>
             <td>
                 <input type="button" value="삭제" class="btn btn-warning"
-                       onclick="deleteFn(${member.number})">
+                       onclick="deleteFn(${member.number})" />
             </td>
         </tr>
     </c:forEach>
     <tr>
         <td colspan="8" align="right">
             <input type="button" value="회원가입" class="btn btn-primary"
-                   onclick="location.href='member/memberRegister.html'">
+                   onclick="location.href='/memberRegister.do'" />
         </td>
     </tr>
 </table>
