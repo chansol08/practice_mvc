@@ -13,7 +13,7 @@ public interface Controller {
      * @param request 요청에 관련된 parameter
      * @param response 응답에 관련된 parameter
      * @return String (경로)
-     * @throws ServletException
+     * @throws ServletException 서블릿 예외
      * @throws IOException 입/출력 관련 예외
      */
     String requestHandler(HttpServletRequest request, HttpServletResponse response)

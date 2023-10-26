@@ -26,7 +26,7 @@ public class MemberInsertController implements Controller {
         String nextPage = null;
 
         if (count > 0) {
-            nextPage = "/memberList.do";
+            nextPage = "redirect:/memberList.do";
         } else {
             throw new ServletException("insert fail");
         }

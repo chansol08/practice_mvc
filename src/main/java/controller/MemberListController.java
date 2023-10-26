@@ -19,6 +19,6 @@ public class MemberListController implements Controller {
 
         request.setAttribute("members", members);
 
-        return "member/memberList.jsp";
+        return "/WEB-INF/member/memberList.jsp";
     }
 }
