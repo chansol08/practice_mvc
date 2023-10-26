@@ -20,6 +20,6 @@ public class MemberContentController implements Controller {
 
         request.setAttribute("member", member);
 
-        return "/WEB-INF/member/memberContent.jsp";
+        return "memberContent";
     }
 }

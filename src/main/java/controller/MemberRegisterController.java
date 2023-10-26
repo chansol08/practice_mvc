@@ -11,6 +11,6 @@ public class MemberRegisterController implements Controller {
     public String requestHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        return "/WEB-INF/member/memberRegister.html";
+        return "memberRegister";
     }
 }

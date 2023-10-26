@@ -26,34 +26,15 @@ public class MemberFrontController extends HttpServlet {
         String command = url.substring(contextPath.length());
         System.out.println("command = " + command);
 
-        Controller controller = null;
-        String nextPage = null;
-
-        if (command.equals("/memberList.do")) {
-            controller = new MemberListController();
-            nextPage = controller.requestHandler(request, response);
-        } else if (command.equals("/memberInsert.do")) {
-            controller = new MemberInsertController();
-            nextPage = controller.requestHandler(request, response);
-        } else if (command.equals("/memberRegister.do")) {
-            controller = new MemberRegisterController();
-            nextPage = controller.requestHandler(request, response);
-        } else if (command.equals("/memberContent.do")) {
-            controller = new MemberContentController();
-            nextPage = controller.requestHandler(request, response);
-        } else if (command.equals("/memberUpdate.do")) {
-            controller = new MemberUpdateController();
-            nextPage = controller.requestHandler(request, response);
-        } else if (command.equals("/memberDelete.do")) {
-            controller = new MemberDeleteController();
-            nextPage = controller.requestHandler(request, response);
-        }
+        HandlerMapping mapping = new HandlerMapping();
+        Controller controller = mapping.getController(command);
+        String nextPage = controller.requestHandler(request, response);
 
         if (nextPage != null) {
             if (nextPage.indexOf("redirect:") != -1) {
                 response.sendRedirect(nextPage.split(":")[1]);
             } else {
-                RequestDispatcher dispatcher = request.getRequestDispatcher(nextPage);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(ViewResolver.makeView(nextPage));
                 dispatcher.forward(request, response);
             }
         }
