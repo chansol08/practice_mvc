@@ -1,207 +1,96 @@
 package model;
 
-import java.sql.*;
-import java.util.ArrayList;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import java.io.InputStream;
 import java.util.List;
 
 public class MemberDAO {
-    private Connection conn;
-    private PreparedStatement ps;
-    private ResultSet rs;
+    private static SqlSessionFactory sqlSessionFactory;
 
-    /**
-     * MySQL db connection method
-     * mysql db 에 연결
-     */
-    public void getConnect() {
-        String URL = "jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&serverTimeZone=UTC";
-        String user = "root";
-        String password = "admin12345";
-
-        //MySQL Driver Loading
+    //초기화 블럭 - 프로그램 실행 시 딱 한 번만 실행되는 코드 영역
+    static {
         try {
-            //동적 로딩
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(URL, user, password);
+            String resource = "config/mybatis/config.xml";
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * member insert method
-     * 입력받은 회원의 정보를 db에 저장
-     */
-    public int memberInsert(MemberVO vo) {
-        String sql = "insert into member(id, password, name, age, email, phone) values(?, ?, ?, ?, ?, ?)";
-
-        getConnect();
-
-        int count = 0;
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, vo.getId());
-            ps.setString(2, vo.getPassword());
-            ps.setString(3, vo.getName());
-            ps.setInt(4, vo.getAge());
-            ps.setString(5, vo.getEmail());
-            ps.setString(6, vo.getPhone());
-            //실행
-            count = ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            disconnect();
-        }
-
-        return count;
-    }
-
-    /**
-     * member select method
-     * 회원 리스트 반환
+     * memberList method
      *
-     * @return member list
+     * @return 회원 리스트
      */
     public List<MemberVO> memberList() {
-        String sql = "select * from member";
-
-        getConnect();
-
-        List<MemberVO> members = new ArrayList<>();
-        try {
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                MemberVO member = new MemberVO();
-                member.setNumber(rs.getInt("number"));
-                member.setId(rs.getString("id"));
-                member.setPassword(rs.getString("password"));
-                member.setName(rs.getString("name"));
-                member.setAge(rs.getInt("age"));
-                member.setEmail(rs.getString("email"));
-                member.setPhone(rs.getString("phone"));
-
-                members.add(member);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            disconnect();
-        }
+        SqlSession session = sqlSessionFactory.openSession();
+        List<MemberVO> members = session.selectList("memberList");
+        session.close();
 
         return members;
     }
 
     /**
-     * member Update method
-     * PK를 받아 나이, 이메일, 전화번호를 수정
+     * memberInsert method
      *
-     * @param member
-     * @return int count
+     * @param member memberVO
+     * @return int 저장된 행의 숫자
      */
-    public int memberUpdate(MemberVO member) {
-        String sql = "update member set age=?, email=?, phone=? where number=?";
-
-        getConnect();
-
-        int count = 0;
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, member.getAge());
-            ps.setString(2, member.getEmail());
-            ps.setString(3, member.getPhone());
-            ps.setInt(4, member.getNumber());
-            count = ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            disconnect();
-        }
+    public int memberInsert(MemberVO member) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.insert("memberInsert", member);
+        session.commit();
+        session.close();
 
         return count;
     }
 
     /**
-     * member delete method
-     * 삭제된 행의 숫자를 반환
+     * memberDelete method
      *
-     * @param number
-     * @return int count
+     * @param number 회원의 기본키
+     * @return 삭제된 행의 숫자
      */
     public int memberDelete(int number) {
-        String sql = "delete from member where number=?";
-
-        getConnect();
-
-        int count = 0;
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, number);
-            count = ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            disconnect();
-        }
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.delete("memberDelete", number);
+        session.commit();
+        session.close();
 
         return count;
     }
 
     /**
-     * member content method
-     * 특정 회원의 정보를 반환
+     * memberContent method
      *
-     * @param number
-     * @return member
+     * @param number 회원의 기본키
+     * @return MemberVO 회원 객체
      */
     public MemberVO memberContent(int number) {
-        String sql = "select * from member where number=?";
-
-        getConnect();
-
-        MemberVO member = new MemberVO();
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, number);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                member.setNumber(rs.getInt("number"));
-                member.setId(rs.getString("id"));
-                member.setPassword(rs.getString("password"));
-                member.setName(rs.getString("name"));
-                member.setAge(rs.getInt("age"));
-                member.setEmail(rs.getString("email"));
-                member.setPhone(rs.getString("phone"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            disconnect();
-        }
+        SqlSession session = sqlSessionFactory.openSession();
+        MemberVO member = session.selectOne("memberContent", number);
+        session.close();
 
         return member;
     }
 
     /**
-     * disconnect method
-     * 리소스 반환
+     * memberUpdate method
+     *
+     * @param member 회원 객체
+     * @return 업데이트된 행의 숫자
      */
-    public void disconnect() {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ps != null) {
-                ps.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public int memberUpdate(MemberVO member) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.update("memberUpdate", member);
+        session.commit();
+        session.close();
+
+        return count;
     }
 }

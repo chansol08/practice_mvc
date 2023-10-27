@@ -9,6 +9,6 @@ public class ViewResolver {
      * @return String 경로
      */
     public static String makeView(String nextPage) {
-        return "/WEB-INF/member" + nextPage + ".jsp";
+        return "/WEB-INF/member/" + nextPage + ".jsp";
     }
 }
