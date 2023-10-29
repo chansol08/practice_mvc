@@ -93,4 +93,18 @@ public class MemberDAO {
 
         return count;
     }
+
+    /**
+     * memberLogin method
+     *
+     * @param member 회원의 아이디와 비밀번호를 담은 member객체
+     * @return userName 회원의 이름을 반환
+     */
+    public String memberLogin(MemberVO member) {
+        SqlSession session = sqlSessionFactory.openSession();
+        String userName = session.selectOne("memberLogin", member);
+        session.close();
+
+        return userName;
+    }
 }

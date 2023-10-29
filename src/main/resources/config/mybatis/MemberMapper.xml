@@ -9,6 +9,14 @@
         select * from member;
     </select>
 
+    <select id="memberContent" parameterType="Integer" resultType="memberVO">
+        select * from member where number=#{number};
+    </select>
+
+    <select id="memberLogin" parameterType="memberVO" resultType="String">
+        select name from member where id=#{id} and password=#{password};
+    </select>
+
     <insert id="memberInsert" parameterType="memberVO">
         insert into member(id, password, name, age, email, phone)
         values(#{id}, #{password}, #{name}, #{age}, #{email}, #{phone});
@@ -17,10 +25,6 @@
     <delete id="memberDelete" parameterType="Integer">
         delete from member where number=#{number};
     </delete>
-
-    <select id="memberContent" parameterType="Integer" resultType="memberVO">
-        select * from member where number=#{number};
-    </select>
 
     <update id="memberUpdate" parameterType="memberVO">
         update member set age=#{age}, email=#{email}, phone=#{phone} where number=#{number};
