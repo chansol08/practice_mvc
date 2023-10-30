@@ -31,7 +31,7 @@ public class MemberFrontController extends HttpServlet {
         String nextPage = controller.requestHandler(request, response);
 
         if (nextPage != null) {
-            if (nextPage.indexOf("redirect:") != -1) {
+            if (nextPage.contains("redirect:")) {
                 response.sendRedirect(nextPage.split(":")[1]);
             } else {
                 RequestDispatcher dispatcher = request.getRequestDispatcher(ViewResolver.makeView(nextPage));

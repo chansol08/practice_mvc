@@ -6,6 +6,7 @@ import model.MemberVO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class MemberLoginController implements Controller {
@@ -24,12 +25,14 @@ public class MemberLoginController implements Controller {
         String userName = dao.memberLogin(member);
 
         if (userName != null && !(userName.equals(""))) {
-            request.getSession().setAttribute("userId", userId);
-            request.getSession().setAttribute("userName ", userName);
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", userId);
+            session.setAttribute("userName", userName);
         } else {
-            request.getSession().setAttribute("userId", "");
-            request.getSession().setAttribute("userName ", "");
-            request.getSession().setAttribute("message", "사용자 정보가 올바르지 않습니다.");
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", "");
+            session.setAttribute("userName", "");
+            session.setAttribute("message", "사용자 정보가 올바르지 않습니다.");
         }
 
         return "redirect:/memberList.do";

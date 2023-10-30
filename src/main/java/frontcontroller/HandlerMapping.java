@@ -20,6 +20,7 @@ public class HandlerMapping {
         mapping.put("/memberUpdate.do", new MemberUpdateController());
         mapping.put("/memberDelete.do", new MemberDeleteController());
         mapping.put("/memberLogin.do", new MemberLoginController());
+        mapping.put("/memberLogout.do", new MemberLogoutController());
     }
 
     /**

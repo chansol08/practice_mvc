@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-10-29
+  Date: 2023-10-30
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -50,6 +50,11 @@
 
             return true;
         }
+
+        //로그아웃 함수
+        function logout() {
+            location.href="<c:url value='/memberLogout.do' />";
+        }
     </script>
 </head>
 <body>
@@ -57,17 +62,23 @@
     <h2>회원 관리 시스템</h2>
     <div class="panel panel-default"> <%-- panel --%>
         <div class="panel-heading"> <%-- panel-header --%>
-            <form class="form-inline" action="/memberLogin.do" method="post">
-                <div class="form-group">
-                    <label for="user_id">ID:</label>
-                    <input type="text" class="form-control" id="user_id" name="user_id">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-                <button type="submit" class="btn btn-default" onclick="return check()">로그인</button>
-            </form>
+            <c:if test="${sessionScope.userId == null || sessionScope.userId == ''}">
+                <form class="form-inline" action="/memberLogin.do" method="post">
+                    <div class="form-group">
+                        <label for="user_id">ID:</label>
+                        <input type="text" class="form-control" id="user_id" name="user_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-default" onclick="return check()">로그인</button>
+                </form>
+            </c:if>
+            <c:if test="${sessionScope.userId != null && sessionScope.userId != ''}">
+                ${sessionScope.userName}님 환영합니다.
+                <button type="button" class="btn btn-warning" onclick="logout()">로그아웃</button>
+            </c:if>
         </div>
         <%-- end panel-header --%>
         <div class="panel-body"> <%-- panel-body --%>
@@ -109,14 +120,22 @@
                             <td>
                                     ${member.phone}
                             </td>
-                            <td>
-                                <input type="button" value="삭제" class="btn btn-warning"
-                                       onclick="deleteFn(${member.number})"/>
-                            </td>
+                            <c:if test="${sessionScope.userId == member.id}">
+                                <td>
+                                    <input type="button" value="삭제" class="btn btn-warning"
+                                           onclick="deleteFn(${member.number})" />
+                                </td>
+                            </c:if>
+                            <c:if test="${sessionScope.userId != member.id}">
+                                <td>
+                                    <input type="button" value="삭제" class="btn btn-warning"
+                                           onclick="deleteFn(${member.number})" disabled="disabled" />
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                     <tr>
-                        <td colspan="8" align="right">
+                        <td colspan="8" align="left">
                             <input type="button" value="회원가입" class="btn btn-primary"
                                    onclick="location.href='/memberRegister.do'"/>
                         </td>

@@ -19,6 +19,7 @@ public class MemberDeleteController implements Controller {
         String nextPage = null;
 
         if (count > 0) {
+            request.getSession().invalidate();
             nextPage = "redirect:/memberList.do";
         } else {
             throw new ServletException("delete fail");
