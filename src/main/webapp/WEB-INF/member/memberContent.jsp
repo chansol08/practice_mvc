@@ -33,10 +33,10 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <h2>회원 관리 시스템</h2>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+<div class="container"> <%-- container --%>
+    <h2>상세 정보</h2>
+    <div class="panel panel-default"> <%-- panel --%>
+        <div class="panel-heading"> <%-- panel-header --%>
             <c:if test="${sessionScope.userId != null && sessionScope.userId != ''}">
                 <h3>${sessionScope.userName}님 환영합니다.</h3>
             </c:if>
@@ -44,8 +44,9 @@
                 <h3>안녕하세요.</h3>
             </c:if>
         </div>
-        <div class="panel-body">
-            <form id="form1" name="form1" class="form-horizontal" method="post">
+        <%-- end panel-header --%>
+        <div class="panel-body"> <%-- panel-body --%>
+            <form id="form1" name="form1" class="form-horizontal" method="post"> <%-- form --%>
                 <input type="hidden" name="number" value="${member.number}" />
                 <div class="form-group">
                     <label class="control-label col-sm-2">번호:</label>
@@ -74,24 +75,26 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2">나이:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="age" name="age" value="${member.age}" />
+                        <input type="text" class="form-control" id="age" name="age" value="${member.age}" style="width: 10%" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">이메일:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="email" name="email" value="${member.email}" />
+                        <input type="text" class="form-control" id="email" name="email" value="${member.email}" style="width: 30%" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">전화번호:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="phone" name="phone" value="${member.phone}" />
+                        <input type="text" class="form-control" id="phone" name="phone" value="${member.phone}" style="width: 30%" />
                     </div>
                 </div>
             </form>
+            <%-- end form --%>
         </div>
-        <div class="panel-footer" style="text-align: center">
+        <%-- end panel-body --%>
+        <div class="panel-footer" style="text-align: center;"> <%-- panel-footer --%>
             <c:if test="${!empty sessionScope.userId}">
                 <c:if test="${sessionScope.userId == member.id}">
                     <input type="button" value="수정하기" class="btn btn-primary"
@@ -105,7 +108,10 @@
             <input type="button" value="취소" class="btn btn-warning" onclick="reset()" />
             <input type="button" value="리스트" onclick="location.href='/memberList.do'" class="btn btn-success" />
         </div>
+        <%-- end panel-footer --%>
     </div>
+    <%-- end panel --%>
 </div>
+<%-- end container --%>
 </body>
 </html>

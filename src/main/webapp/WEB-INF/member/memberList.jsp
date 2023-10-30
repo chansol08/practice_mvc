@@ -83,7 +83,7 @@
         <%-- end panel-header --%>
         <div class="panel-body"> <%-- panel-body --%>
             <div class="table-responsive"> <%-- table wrapper --%>
-                <table class="table table-hover">
+                <table class="table table-hover"> <%-- table --%>
                     <thead>
                     <tr>
                         <th>번호</th>
@@ -134,14 +134,17 @@
                             </c:if>
                         </tr>
                     </c:forEach>
-                    <tr>
-                        <td colspan="8" align="left">
-                            <input type="button" value="회원가입" class="btn btn-primary"
-                                   onclick="location.href='/memberRegister.do'"/>
-                        </td>
-                    </tr>
+                    <c:if test="${sessionScope.userId == null || sessionScope.uerId == ''}">
+                        <tr>
+                            <td colspan="8" align="left">
+                                <input type="button" value="회원가입" class="btn btn-primary"
+                                       onclick="location.href='/memberRegister.do'"/>
+                            </td>
+                        </tr>
+                    </c:if>
                     </tbody>
                 </table>
+                <%-- end table --%>
             </div>
             <%-- end table wrapper --%>
         </div>
