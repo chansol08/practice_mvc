@@ -55,6 +55,63 @@
         function logout() {
             location.href="<c:url value='/memberLogout.do' />";
         }
+
+        //Collapsible panel onclick
+        function memberList() {
+            $.ajax({
+                url : "<c:url value='/memberAjaxList.do' />",
+                type : "get",
+                dataType : "json",
+                success : resultHtml,
+                error : function() {
+                    error("error");
+                }
+            });
+        }
+
+        //memberList() 콜백 함수
+        function resultHtml(data) {
+            let html = "<table class='table table-hover'>";
+            html += "<tr>";
+            html += "<th>번호</th>";
+            html += "<th>아이디</th>";
+            html += "<th>비밀번호</th>";
+            html += "<th>이름</th>";
+            html += "<th>나이</th>";
+            html += "<th>이메일</th>";
+            html += "<th>전화번호</th>";
+            html += "<th></th>";
+            html += "</tr>";
+
+            $.each(data, function(index, obj) {
+                html += "<tr>";
+                html += "<td>" + obj.number + "</td>";
+                html += "<td>" + obj.id + "</td>";
+                html += "<td>" + obj.password + "</td>";
+                html += "<td>" + obj.name + "</td>";
+                html += "<td>" + obj.age + "</td>";
+                html += "<td>" + obj.email + "</td>";
+                html += "<td>" + obj.phone + "</td>";
+                html += "<td><input type='button' value='삭제' class='btn btn-warning' onclick='delFn(" + obj.number + ")' /></td>";
+                html += "</tr>";
+            });
+            html += "</table>";
+
+            $("#collapse1 .panel-body").html(html);
+        }
+
+        //삭제 onclick
+        function delFn(number) {
+            $.ajax({
+                url : "<c:url value="/memberAjaxDelete.do" />",
+                type : "get",
+                data : {"number" : number},
+                success : memberList(),
+                error : function() {
+                    error("error");
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -155,8 +212,21 @@
         <%-- end panel-footer --%>
     </div>
     <%-- end panel --%>
+    <div class="panel-group"> <%-- Collapsible panel --%>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse1" onclick="memberList()">회원 리스트 보기</a>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">Panel Body</div>
+                <div class="panel-footer">practice ajax</div>
+            </div>
+        </div>
+    </div>
+    <%-- end Collapsible panel --%>
 </div>
 <%-- end container --%>
-</div>
 </body>
 </html>

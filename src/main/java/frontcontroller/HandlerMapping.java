@@ -21,6 +21,9 @@ public class HandlerMapping {
         mapping.put("/memberDelete.do", new MemberDeleteController());
         mapping.put("/memberLogin.do", new MemberLoginController());
         mapping.put("/memberLogout.do", new MemberLogoutController());
+        mapping.put("/memberDoubleCheck.do", new MemberDoubleCheckController());
+        mapping.put("/memberAjaxList.do", new MemberAjaxListController());
+        mapping.put("/memberAjaxDelete.do", new MemberAjaxDeleteController());
     }
 
     /**

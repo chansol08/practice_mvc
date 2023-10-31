@@ -107,4 +107,21 @@ public class MemberDAO {
 
         return userName;
     }
+
+    /**
+     * memberDoubleCheck method
+     *
+     * @param id 회원 가입할 아이디
+     * @return true || false
+     */
+    public boolean memberDoubleCheck(String id) {
+        SqlSession session = sqlSessionFactory.openSession();
+        String checkId = session.selectOne("memberDoubleCheck", id);
+
+        if (checkId != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

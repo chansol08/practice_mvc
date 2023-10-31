@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-10-30
+  Date: 2023-10-31
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -99,13 +99,15 @@
                 <c:if test="${sessionScope.userId == member.id}">
                     <input type="button" value="수정하기" class="btn btn-primary"
                            onclick="update()" />
+                    <input type="button" value="취소" class="btn btn-warning" onclick="reset()" />
                 </c:if>
                 <c:if test="${sessionScope.userId != member.id}">
                     <input type="button" value="수정하기" class="btn btn-primary"
                            onclick="update()" disabled="disabled" />
+                    <input type="button" value="취소" class="btn btn-warning"
+                           onclick="reset()" disabled="disabled" />
                 </c:if>
             </c:if>
-            <input type="button" value="취소" class="btn btn-warning" onclick="reset()" />
             <input type="button" value="리스트" onclick="location.href='/memberList.do'" class="btn btn-success" />
         </div>
         <%-- end panel-footer --%>

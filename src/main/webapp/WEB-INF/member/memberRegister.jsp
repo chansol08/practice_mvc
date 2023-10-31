@@ -1,15 +1,15 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-10-30
+  Date: 2023-10-31
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
 
-    <title>memberRegister</title>
+    <title>member Register</title>
 
     <!--  start bootstrap3 info  -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +31,37 @@
         function reset() {
             document.form1.reset();
         }
+
+        //아이디 중복확인 onclick
+        function doubleCheck() {
+            if ($("#id").val() == '') {
+                alert("아이디를 입력하세요.");
+                $('#id').focus();
+                return;
+            }
+
+            const id = $("#id").val();
+            $.ajax({
+                url : "<c:url value='/memberDoubleCheck.do' />",
+                type : "POST",
+                data : {"id" : id},
+                success : dbCheck,
+                error : function() {
+                    alert("error");
+                }
+            });
+        }
+
+        //중복확인 ajax 콜백 함수
+        function dbCheck(isDuplication) {
+            if (isDuplication === 'true') {
+                alert("중복된 아이디 입니다.");
+                $("#id").focus();
+            } else {
+                alert("사용 가능한 아이디 입니다.");
+                $("#id").focus();
+            }
+        }
     </script>
 </head>
 <body>
@@ -46,8 +77,19 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="id">아이디:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="id" name="id"
-                               placeholder="아이디를 입력하세요" style="width: 30%" />
+                        <table> <%-- table --%>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" id="id" name="id"
+                                           placeholder="아이디를 입력하세요" />
+                                </td>
+                                <td>
+                                    <input type="button" value="중복확인" class="btn btn-warning"
+                                           onclick="doubleCheck()" />
+                                </td>
+                            </tr>
+                        </table>
+                        <%-- end table --%>
                     </div>
                 </div>
                 <div class="form-group">
@@ -92,7 +134,7 @@
         <div class="panel-footer" style="text-align: center;"> <%-- panel-footer --%>
             <input type="button" value="등록" class="btn btn-primary" onclick="add()" />
             <input type="button" value="취소" class="btn btn-warning" onclick="reset()" />
-            <input type="button" value="리스트" onclick="location.href='/memberList.do'" class="btn btn-success" />
+            <input type="button" value="리스트" class="btn btn-success" onclick="location.href='/memberList.do'" />
         </div>
         <%-- end panel-footer --%>
     </div>
