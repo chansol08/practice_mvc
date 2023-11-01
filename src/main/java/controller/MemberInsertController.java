@@ -13,6 +13,7 @@ public class MemberInsertController implements Controller {
     @Override
     public String requestHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int count = 0;
         MemberDAO dao = new MemberDAO();
         MemberVO member = new MemberVO();
         member.setId(request.getParameter("id"));
@@ -22,7 +23,14 @@ public class MemberInsertController implements Controller {
         member.setEmail(request.getParameter("email"));
         member.setPhone(request.getParameter("phone"));
 
-        int count = dao.memberInsert(member);
+        if (request.getParameter("mode").equals("fileAdd")) {
+            member.setFilename(request.getParameter("filename"));
+
+            count = dao.memberInsertFile(member);
+        } else {
+            count = dao.memberInsert(member);
+        }
+
         String nextPage = null;
 
         if (count > 0) {

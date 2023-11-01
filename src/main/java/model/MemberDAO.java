@@ -23,7 +23,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberList method
+     * 저장된 회원의 목록을 조회
      *
      * @return 회원 리스트
      */
@@ -36,7 +36,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberInsert method
+     * memberVO 필드에 filename 이 없는 경우 저장
      *
      * @param member memberVO
      * @return int 저장된 행의 숫자
@@ -51,7 +51,22 @@ public class MemberDAO {
     }
 
     /**
-     * memberDelete method
+     * memberVO 필드에 filename 이 있는 경우 저장
+     *
+     * @param member MemberVO
+     * @return int 저장된 행의 숫자
+     */
+    public int memberInsertFile(MemberVO member) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.insert("memberInsertFile", member);
+        session.commit();
+        session.close();
+
+        return count;
+    }
+
+    /**
+     * 저장된 회원을 삭제
      *
      * @param number 회원의 기본키
      * @return 삭제된 행의 숫자
@@ -66,7 +81,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberContent method
+     * 저장된 한 명의 회원 정보를 조회
      *
      * @param number 회원의 기본키
      * @return MemberVO 회원 객체
@@ -80,7 +95,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberUpdate method
+     * 회원의 정보를 수정
      *
      * @param member 회원 객체
      * @return 업데이트된 행의 숫자
@@ -95,7 +110,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberLogin method
+     * 회원 로그인
      *
      * @param member 회원의 아이디와 비밀번호를 담은 member객체
      * @return userName 회원의 이름을 반환
@@ -109,7 +124,7 @@ public class MemberDAO {
     }
 
     /**
-     * memberDoubleCheck method
+     * 아이디 중복 확인
      *
      * @param id 회원 가입할 아이디
      * @return true || false

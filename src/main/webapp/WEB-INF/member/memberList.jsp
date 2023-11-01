@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-10-30
+  Date: 2023-11-01
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -18,6 +18,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!--  end bootstrap3 info  -->
+
+    <style type="text/css">
+        table td{
+            vertical-align: middle !important;
+        }
+    </style>
 
     <script type="text/javascript">
         /*
@@ -44,7 +50,7 @@
             }
 
             if ($('#password').val() == '') {
-                alert('아이디를 입력하세요');
+                alert('비밀번호를 입력하세요');
                 return false;
             }
 
@@ -150,6 +156,7 @@
                         <th>나이</th>
                         <th>이메일</th>
                         <th>전화번호</th>
+                        <th>이미지</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -176,6 +183,12 @@
                             </td>
                             <td>
                                     ${member.phone}
+                            </td>
+                            <td>
+                                    <c:if test="${member.filename != null && member.filename != ''}">
+                                        <img src="<c:out value='file_repository/${member.filename}' />"
+                                             width="60px" height="60px" />
+                                    </c:if>
                             </td>
                             <c:if test="${sessionScope.userId == member.id}">
                                 <td>

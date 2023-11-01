@@ -7,6 +7,7 @@ create table member(
     age int not null,
     email varchar(30) not null,
     phone varchar(30) not null,
+    filename varchar(100),
     unique key(id)
 );
 
@@ -15,7 +16,7 @@ drop table member;
 
 # insert C
 insert into member(id, password, name, age, email, phone)
-values('admin', 'admin', '관리자', 40, 'bit@naver.com', '010-1111-1111');
+values('admin', '1234', '관리자', 40, 'admin@admin.com', '010-1111-1111');
 
 # select R
 select * from member;

@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-10-31
+  Date: 2023-11-01
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -21,10 +21,33 @@
     <!--  end bootstrap3 info  -->
 
     <script type="text/javascript">
-        //등록 onclick
+        //파일 업로드 및 등록 onclick
         function add() {
-            document.form1.action="<c:url value='/memberInsert.do' />";
-            document.form1.submit();
+            if ($("#file").val() != '') {
+                let formData = new FormData();
+                formData.append("file", $("input[name=file]")[0].files[0]);
+
+                $.ajax({
+                    url : "<c:url value='/fileAdd.do' />",
+                    type : "post",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(data) {
+                        alert(data);
+                        $("#filename").val(data);
+
+                        document.form1.action="<c:url value='/memberInsert.do' />?mode=fileAdd";
+                        document.form1.submit();
+                    },
+                    error : function() {
+                        alert("error");
+                    }
+                });
+            } else {
+                document.form1.action="<c:url value='/memberInsert.do' />?mode=add";
+                document.form1.submit();
+            }
         }
 
         //취소 버튼 onclick
@@ -69,7 +92,7 @@
     <h2>회원 가입 화면</h2>
     <div class="panel panel-default"> <%-- panel --%>
         <div class="panel-heading"> <%-- panel-header --%>
-            <h3>안녕하세요.</h3>
+            <h5>안녕하세요.</h5>
         </div>
         <%-- end panel-header --%>
         <div class="panel-body"> <%-- panel-body --%>
@@ -126,6 +149,13 @@
                         <input type="text" class="form-control" id="phone" name="phone"
                                placeholder="전화번호를 입력하세요" style="width: 30%" />
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="file">파일첨부:</label>
+                    <div class="col-sm-10">
+                        <input type="file" class="control-label" id="file" name="file" style="width: 30%" />
+                    </div>
+                    <input type="hidden" name="filename" id="filename" value="" />
                 </div>
             </form>
             <%-- end form --%>

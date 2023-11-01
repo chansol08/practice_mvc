@@ -8,6 +8,7 @@ public class MemberVO {
     private int age;
     private String email;
     private String phone;
+    private String filename;
 
     //기본 생성자
     public MemberVO() {
@@ -91,6 +92,14 @@ public class MemberVO {
         this.phone = phone;
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     @Override
     public String toString() {
         return "MemberVO{" +
@@ -101,6 +110,7 @@ public class MemberVO {
                 ", age=" + age +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", filename='" + filename + '\'' +
                 '}';
     }
 }
