@@ -5,6 +5,19 @@
 
 <mapper namespace="mybatis.MemberMapper">
 
+    <!-- insert -->
+    <insert id="memberInsert" parameterType="memberVO">
+        insert into member(id, password, name, age, email, phone)
+        values(#{id}, #{password}, #{name}, #{age}, #{email}, #{phone});
+    </insert>
+
+    <insert id="memberInsertFile" parameterType="memberVO">
+        insert into member(id, password, name, age, email, phone, filename)
+        values(#{id}, #{password}, #{name}, #{age}, #{email}, #{phone}, #{filename});
+    </insert>
+    <!-- insert -->
+
+    <!-- select -->
     <select id="memberList" resultType="memberVO">
         select * from member;
     </select>
@@ -20,23 +33,26 @@
     <select id="memberDoubleCheck" parameterType="String" resultType="String">
         select id from member where id=#{id};
     </select>
+    <!-- select -->
 
-    <insert id="memberInsert" parameterType="memberVO">
-        insert into member(id, password, name, age, email, phone)
-        values(#{id}, #{password}, #{name}, #{age}, #{email}, #{phone});
-    </insert>
-
-    <insert id="memberInsertFile" parameterType="memberVO">
-        insert into member(id, password, name, age, email, phone, filename)
-        values(#{id}, #{password}, #{name}, #{age}, #{email}, #{phone}, #{filename});
-    </insert>
-
-    <delete id="memberDelete" parameterType="Integer">
-        delete from member where number=#{number};
-    </delete>
-
+    <!-- update -->
     <update id="memberUpdate" parameterType="memberVO">
         update member set age=#{age}, email=#{email}, phone=#{phone} where number=#{number};
     </update>
+
+    <update id="memberUpdateFile" parameterType="memberVO">
+        update member set age=#{age}, email=#{email}, phone=#{phone}, filename=#{filename} where number=#{number};
+    </update>
+
+    <update id="memberDeleteFile" parameterType="Integer">
+        update member set filename='' where number=#{number};
+    </update>
+    <!-- update -->
+
+    <!-- delete -->
+    <delete id="memberDelete" parameterType="Integer">
+        delete from member where number=#{number};
+    </delete>
+    <!-- delete -->
 
 </mapper>

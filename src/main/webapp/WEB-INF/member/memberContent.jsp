@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: chans
-  Date: 2023-11-01
+  Date: 2023-11-02
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -22,8 +22,31 @@
     <script type="text/javascript">
         //수정 버튼 onclick
         function update() {
-            document.form1.action="<c:url value="/memberUpdate.do" />";
-            document.form1.submit();
+            if ($("#file").val() != '') {
+                let formData = new FormData();
+                formData.append("file", $("input[name=file]")[0].files[0]);
+
+                $.ajax({
+                    url : "<c:url value='/fileAdd.do' />",
+                    type : "post",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(data) {
+                        alert(data);
+                        $("#filename").val(data);
+
+                        document.form1.action="<c:url value='/memberUpdate.do' />?mode=fileUpdate";
+                        document.form1.submit();
+                    },
+                    error : function() {
+                        alert("error");
+                    }
+                });
+            } else {
+                document.form1.action="<c:url value='/memberUpdate.do' />?mode=update";
+                document.form1.submit();
+            }
         }
 
         //취소 버튼 onclick
@@ -34,6 +57,11 @@
         //파일 다운 a tag
         function getFile(filename) {
             location.href="<c:url value="/fileGet.do" />?filename=" + filename;
+        }
+
+        //파일 삭제 a tag
+        function deleteFile(number, filename) {
+            location.href="<c:url value='/fileDelete.do' />?number=" + number + "&filename=" + filename;
         }
     </script>
 </head>
@@ -59,6 +87,7 @@
         <div class="panel-body"> <%-- panel-body --%>
             <form id="form1" name="form1" class="form-horizontal" method="post"> <%-- form --%>
                 <input type="hidden" name="number" value="${member.number}" />
+                <input type="hidden" name="filename" id="filename" value="" />
                 <div class="form-group">
                     <label class="control-label col-sm-2">번호:</label>
                     <div class="col-sm-10">
@@ -110,7 +139,9 @@
                                 <c:out value="${member.filename}" />
                             </a>
                             <c:if test="${sessionScope.userId != null && sessionScope.userId == member.id && member.filename != null && member.filename != ''}">
-                                <sapn class="glyphicon glyphicon-remove"></sapn>
+                                <a href="javascript:deleteFile('${member.number}', '${member.filename}')">
+                                    <sapn class="glyphicon glyphicon-remove"></sapn>
+                                </a>
                             </c:if>
                         </c:if>
                     </div>

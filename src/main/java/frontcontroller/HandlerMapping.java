@@ -26,6 +26,7 @@ public class HandlerMapping {
         mapping.put("/memberAjaxDelete.do", new MemberAjaxDeleteController());
         mapping.put("/fileAdd.do", new FileAddController());
         mapping.put("/fileGet.do", new FileGetController());
+        mapping.put("/fileDelete.do", new FileDeleteController());
     }
 
     /**

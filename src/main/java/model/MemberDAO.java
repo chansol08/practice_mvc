@@ -39,7 +39,7 @@ public class MemberDAO {
      * memberVO 필드에 filename 이 없는 경우 저장
      *
      * @param member memberVO
-     * @return int 저장된 행의 숫자
+     * @return 저장된 행의 숫자
      */
     public int memberInsert(MemberVO member) {
         SqlSession session = sqlSessionFactory.openSession();
@@ -54,7 +54,7 @@ public class MemberDAO {
      * memberVO 필드에 filename 이 있는 경우 저장
      *
      * @param member MemberVO
-     * @return int 저장된 행의 숫자
+     * @return 저장된 행의 숫자
      */
     public int memberInsertFile(MemberVO member) {
         SqlSession session = sqlSessionFactory.openSession();
@@ -81,10 +81,25 @@ public class MemberDAO {
     }
 
     /**
+     * 회원의 파일 이름을 삭제
+     *
+     * @param number 회원의 기본 키
+     * @return 삭제된 행의 숫자
+     */
+    public int memberDeleteFile(int number) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.update("memberDeleteFile", number);
+        session.commit();
+        session.close();
+
+        return count;
+    }
+
+    /**
      * 저장된 한 명의 회원 정보를 조회
      *
      * @param number 회원의 기본키
-     * @return MemberVO 회원 객체
+     * @return 회원 객체
      */
     public MemberVO memberContent(int number) {
         SqlSession session = sqlSessionFactory.openSession();
@@ -110,10 +125,25 @@ public class MemberDAO {
     }
 
     /**
+     * 파일 정보를 가진 회원 수정
+     *
+     * @param member 회원 객체
+     * @return 수정된 행의 숫자
+     */
+    public int memberUpdateFile(MemberVO member) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int count = session.update("memberUpdateFile", member);
+        session.commit();
+        session.close();
+
+        return count;
+    }
+
+    /**
      * 회원 로그인
      *
      * @param member 회원의 아이디와 비밀번호를 담은 member객체
-     * @return userName 회원의 이름을 반환
+     * @return 회원의 이름을 반환
      */
     public String memberLogin(MemberVO member) {
         SqlSession session = sqlSessionFactory.openSession();

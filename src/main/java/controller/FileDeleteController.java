@@ -1,24 +1,23 @@
 package controller;
 
 import model.MemberDAO;
-import model.MemberVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 
-public class MemberDeleteController implements Controller {
+public class FileDeleteController implements Controller {
 
     @Override
     public String requestHandler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int number = Integer.parseInt(request.getParameter("number"));
-
-        MemberDAO dao = new MemberDAO();
-        MemberVO member = dao.memberContent(number);
-        String filename = member.getFilename();
+        String filename = request.getParameter("filename");
+        filename = URLEncoder.encode(filename, "UTF-8");
+        filename = filename.replace("+", " ");
 
         String UPLOAD_DIR = "file_repository";
         String uploadPath = request.getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
@@ -26,17 +25,18 @@ public class MemberDeleteController implements Controller {
 
         if (file.exists()) {
             file.delete();
+            System.out.println("파일 삭제 완료");
         }
 
-        int count = dao.memberDelete(number);
+        MemberDAO dao = new MemberDAO();
+        int count = dao.memberDeleteFile(number);
 
         String nextPage = null;
 
         if (count > 0) {
-            request.getSession().invalidate();
-            nextPage = "redirect:/memberList.do";
+            nextPage = "redirect:/memberContent.do?number=" + number;
         } else {
-            throw new ServletException("delete fail");
+            throw new ServletException("update fail");
         }
 
         return nextPage;
